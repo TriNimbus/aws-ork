@@ -1,0 +1,3 @@
+include README.md
+include aws-ork.init
+include aws_ork.conf
