@@ -6,8 +6,8 @@ spawned or terminated via Auto Scaling groups (ASGs).
 
 | The ASG sends messages for launch and termination events via SNS to
   SQS. The daemon is listening to the SQS messages and:
-| \* removes Salt minion keys on termination messages \* accepts minion
-  keys matching the instance-id in the launch messages
+| - removes Salt minion keys on termination messages
+| - accepts minion keys matching the instance-id in the launch messages
 
 If an S3 URL is configured, the content of ``/etc/salt/pki`` gets synced
 to S3.
@@ -32,12 +32,25 @@ If successful it should look something like this:
     py34: commands succeeded
     congratulations :)
 
-You can find a pip compatible zip file in ``.tox/dist`` which you can
+Installation
+------------
+
+PyPi
+~~~~
+
+::
+
+    pip install aws_ork
+
+local dev version
+~~~~~~~~~~~~~~~~~
+
+You can find a pip compatible zip file in ``.tox/dist``, which you can
 install via:
 
 ::
 
-    pip install .tox/dist/aws_ork-0.4.zip
+    pip install .tox/dist/aws_ork-<VERSION>.zip
 
 Usage
 -----

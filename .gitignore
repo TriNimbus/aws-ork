@@ -1,6 +1,6 @@
 *.egg
 .eggs
-.cache
+.cache/*
 *.egg-info
 *.pyc
 /.tox
