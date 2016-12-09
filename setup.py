@@ -38,8 +38,8 @@ class PyTest(TestCommand):
         raise SystemExit(errno)
 
 
-if os.path.isfile("README.md"):
-    with io.open("README.md", encoding="utf-8") as opendescr:
+if os.path.isfile("README.rst"):
+    with io.open("README.rst", encoding="utf-8") as opendescr:
         long_description = opendescr.read()
 else:
     long_description = __doc__

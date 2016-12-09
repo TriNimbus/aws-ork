@@ -1,3 +1,3 @@
-include README.md
+include README.rst
 include dist/aws_ork
 include dist/aws_ork.conf
