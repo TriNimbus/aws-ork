@@ -17,13 +17,13 @@ import daemon
 
 __author__ = "Stefan Reimer"
 __author_email__ = "stefan@trinimbus.com"
-__version__ = "0.3"
+__version__ = "0.4.1"
 
 logger = logging.getLogger(__name__)
 
 
 # Load our own config: Region and Queue, PollCycle
-def load_config(config_file='/etc/salt/aws_ork.conf'):
+def load_config(config_file='/etc/aws_ork.conf'):
     default = {"SQS_Region": "us-west-2",
                "QueueName": "SaltMasterTestQueue",
                "PollCycle": 60,
@@ -137,7 +137,7 @@ def store_pki(region, url):
 
 
 # Deamonized Loop
-def main():
+def run(purge_queue=False):
     conf = load_config()
     logger.debug("Using config: {0}".format(conf))
 
@@ -147,7 +147,7 @@ def main():
 
     logger.info("Connected to queue {0}: {1}".format(conf['QueueName'], queue))
 
-    if args.purge:
+    if purge_queue:
         queue.purge()
         logger.info('Purging queue')
 
@@ -162,7 +162,7 @@ def main():
 
 
 # Main
-if __name__ == "__main__":
+def main():
     parser = argparse.ArgumentParser(description='Listens to an SQS queue and accepts and removes Salt minion keys')
     parser.add_argument('-v', '--verbose', action='store_true', help='Enable debug logging')
     parser.add_argument('-d', '--daemon', action='store_true', help='Daemonize and enable logging to file')
@@ -181,7 +181,7 @@ if __name__ == "__main__":
             lh.setFormatter(logging.Formatter('%(filename)s[%(process)d]: %(levelname)s - %(message)s'))
             log_fh = lh.socket.fileno()
         else:
-            lh = logging.FileHandler('/var/log/salt/aws_ork.log')
+            lh = logging.FileHandler('/var/log/aws_ork.log')
             lh.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
             log_fh = lh.stream.fileno()
     else:
@@ -195,6 +195,6 @@ if __name__ == "__main__":
         context = daemon.DaemonContext()
         context.files_preserve = [log_fh]
         with context:
-            main()
+            run(args.purge)
     else:
-        main()
+        run(args.purge)

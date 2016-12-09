@@ -3,9 +3,9 @@ A Python daemon to sign and remove Salt minion keys for instances being spawned
 or terminated via Auto Scaling groups (ASGs).
 
 The ASG sends messages for launch and termination events via SNS to SQS.
-The daemon is listening to the SQS messages and:
-* removes Salt minion keys on termination messages
-* accepts minion keys matching the instance-id in the launch messages
+The daemon is listening to the SQS messages and:  
+- removes Salt minion keys on termination messages
+- accepts minion keys matching the instance-id in the launch messages
 
 If an S3 URL is configured, the content of `/etc/salt/pki` gets synced to S3.
 
@@ -26,12 +26,13 @@ congratulations :)
 You can find a pip compatible zip file in `.tox/dist`
 which you can install via:
 ```
-pip install .tox/dist/aws_ork-0.3.zip
+pip install .tox/dist/aws_ork-0.4.zip
 ```
 
 ### Usage
+
 ```
-usage: aws_ork.py [-h] [-v] [-d] [--syslog]
+usage: aws_ork [-h] [-v] [-d] [--syslog] [--purge]
 
 Listens to an SQS queue and accepts and removes Salt minion keys
 
@@ -40,8 +41,9 @@ optional arguments:
   -v, --verbose  Enable debug logging
   -d, --daemon   Daemonize and enable logging to file
   --syslog       Log to syslog rather than file, only in daemon mode
-
+  --purge        Purge all message from queue at startup
 ```
+
 ### Config File
 The daemon looks for an optional config file in `/etc`, see:
 ```
@@ -63,7 +65,7 @@ aws_ork.conf
 ### Unix service
 Example SysV style init file provided, see:
 ```
-aws-ork.init
+dist/aws_ork
 ```
 
 ## FAQ
