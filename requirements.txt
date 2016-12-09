@@ -1,3 +1,6 @@
 boto3
 salt
 python-daemon
+pytest
+pytest-cov
+moto
