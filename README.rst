@@ -75,7 +75,7 @@ The daemon looks for an optional config file in ``/etc``, see:
 
 ::
 
-    aws_ork.conf
+    data/aws_ork.conf
 
 Options
 ~~~~~~~
@@ -103,7 +103,13 @@ Example SysV style init file provided, see:
 
 ::
 
-    dist/aws_ork
+    data/sys_init/aws_ork
+
+Example SystemD style config, see:
+
+::
+
+    data/systemd/*
 
 FAQ
 ---

@@ -1,0 +1,12 @@
+[Unit]
+Description=AWS Ork
+After=network.target
+
+[Service]
+Type=simple
+NotifyAccess=all
+ExecStart=/usr/local/bin/aws_ork
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target

@@ -17,7 +17,7 @@ import daemon
 
 __author__ = "Stefan Reimer"
 __author_email__ = "stefan@trinimbus.com"
-__version__ = "0.4.2"
+__version__ = "0.4.3"
 
 logger = logging.getLogger(__name__)
 

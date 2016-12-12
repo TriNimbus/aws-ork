@@ -1,3 +1,2 @@
 include README.rst
-include dist/aws_ork
-include dist/aws_ork.conf
+recursive-include aws_ork/data *

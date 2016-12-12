@@ -6,7 +6,6 @@ from setuptools import setup
 from setuptools import find_packages
 from setuptools.command.test import test as TestCommand
 
-
 def find_version(filename):
     """Uses re to pull out the assigned value to __version__ in filename."""
 
@@ -44,7 +43,6 @@ if os.path.isfile("README.rst"):
 else:
     long_description = __doc__
 
-
 setup(name='aws_ork',
       version=find_version("aws_ork/__init__.py"),
       description='Daemon listening on SQS for messages from an ASG',
@@ -52,8 +50,7 @@ setup(name='aws_ork',
       author_email='stefan@trinimbus.com',
       url='https://github.com/TriNimbus/aws-ork',
       packages=find_packages(),
-      data_files=[('/etc/init.d', ['dist/aws_ork']),
-                  ('/etc', ['dist/aws_ork.conf'])],
+      include_package_data=True,
       entry_points={'console_scripts': [
         "aws_ork = aws_ork:main" ]},
       install_requires=['boto3', 'salt', 'python-daemon'],
