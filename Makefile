@@ -8,5 +8,9 @@ build:
 doc:
 	pandoc --from=markdown --to=rst --output=README.rst README.md
 
+clean:
+	rm -rf .tox .cache dist
+
 upload:
+	python setup.py bdist_wheel --universal
 	twine upload $(DIST)
