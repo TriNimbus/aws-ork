@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 Type=simple
-Restart=True
+Restart=on-failure
 ExecStart=/usr/local/bin/aws_ork
 KillMode=process
 
