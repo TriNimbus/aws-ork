@@ -87,7 +87,7 @@ Options
 +-----------------------------+-----------------------------+
 | ``QueueName``               | ``"SaltMasterTestQueue"``   |
 +-----------------------------+-----------------------------+
-| ``PollCycle``               | ``60``                      |
+| ``PollPause``               | ``0``                       |
 +-----------------------------+-----------------------------+
 | ``BucketUrl``               | ``None``                    |
 +-----------------------------+-----------------------------+
@@ -114,17 +114,30 @@ Example SystemD style config, see:
 FAQ
 ---
 
--  *Where is this daemon supposed to run?* The daemon is supposed to run
-   on the Salt master instance as it requires file system access to the
-   Salt master's keystore.
--  *Why is ``/etc/salt/pki`` backed up to S3?* Normally the Salt master
-   instance uses a storage type that is not persistent (e.g. EBS).
-   Therefore, the keystore is synced to S3 on each change in order to be
-   restored during boot in case the Salt master instance needs to
-   replaced (not covered by this service).
--  *Who should have access to the S3 location?* As the key store
-   contains private keys which could be used to impersonate Salt
-   minions, download configuration data and potentially passwords for
-   other services, access should be limited accordingly.
+-  *Where is this daemon supposed to run?*
+
+   The daemon is supposed to run on the Salt master instance as it
+   requires file system access to the Salt master's keystore.
+
+-  *Why is ``/etc/salt/pki`` backed up to S3?*
+
+   Normally the Salt master instance uses a storage type that is not
+   persistent (e.g. EBS). Therefore, the keystore is synced to S3 on
+   each change in order to be restored during boot in case the Salt
+   master instance needs to replaced (not covered by this service).
+
+-  *What does the PollPause option do ?*
+
+   | AWS charges each request to SQS. AWS Ork already uses long polling,
+     but if some delayed processing is acceptable, pausing between read
+     requests can further reduces costs.
+   |  Using the default value of "0" (no pause):
+     ``( 365*24*3600 ) / 20 * 0.0000004 $ = 0.63$ / year``
+
+-  *Who should have access to the S3 location?*
+
+   As the key store contains private keys which could be used to
+   impersonate Salt minions, download configuration data and potentially
+   passwords for other services, access should be limited accordingly.
 
 .. |Logo| image:: https://github.com/TriNimbus/aws-ork/blob/master/logo.png

@@ -17,16 +17,16 @@ import daemon
 
 __author__ = "Stefan Reimer"
 __author_email__ = "stefan@trinimbus.com"
-__version__ = "0.4.4"
+__version__ = "0.4.5"
 
 logger = logging.getLogger(__name__)
 
 
-# Load our own config: Region and Queue, PollCycle
+# Load our own config: Region and Queue, PollPause
 def load_config(config_file='/etc/aws_ork.conf'):
     default = {"SQS_Region": "us-west-2",
                "QueueName": "SaltMasterTestQueue",
-               "PollCycle": 60,
+               "PollPause": 0,
                "BucketUrl": None,
                "BucketRegion": None,
                "DeleteUnknownMessages": True}
@@ -59,7 +59,7 @@ def parse_message(message):
         body = json.loads(message.body)
         messagebody = json.loads(body['Message'])
     except ValueError:
-        logger.debug("Could not parse message!")
+        logger.info("Could not parse message!")
         return (None, None)
 
     Event = messagebody['Event']
@@ -82,7 +82,7 @@ def process_messages(queue, DeleteUnknown=True):
 
         (Event, InstanceId) = parse_message(message)
 
-        # We currently only support TERMINATE
+        # TERMINATE
         if Event in ['autoscaling:EC2_INSTANCE_TERMINATE']:
             Key = salt.key.Key(salt_config)
             try:
@@ -93,7 +93,7 @@ def process_messages(queue, DeleteUnknown=True):
             except (OSError, IOError) as e:
                 logger.error("Error trying to remove salt key for {0}! {1}-{2}".format(InstanceId, e.errno, e.strerror))
 
-        # Check if we have a key for instance to be accepted
+        # LAUNCH: Check for not yet accepted key for this minion, otherwise re-try the message again later on
         elif Event in ['autoscaling:EC2_INSTANCE_LAUNCH']:
             Key = salt.key.Key(salt_config)
             try:
@@ -119,7 +119,7 @@ def process_messages(queue, DeleteUnknown=True):
 
 # Delete message
 def delete_message(message):
-    logger.info("Deleting message {0}".format(message))
+    logger.debug("Deleting message {0}".format(message))
     message.delete()
 
 
@@ -158,7 +158,7 @@ def run(purge_queue=False):
         if changes and conf['BucketUrl']:
             store_pki(conf['BucketRegion'], conf['BucketUrl'])
 
-        time.sleep(conf['PollCycle'])
+        time.sleep(conf['PollPause'])
 
 
 # Main
