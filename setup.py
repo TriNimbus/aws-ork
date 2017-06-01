@@ -54,8 +54,8 @@ setup(name='aws_ork',
       entry_points={'console_scripts': [
         "aws_ork = aws_ork:main" ]},
       install_requires=['boto3', 'salt', 'python-daemon'],
-      tests_require=["pytest", "pytest-cov", "moto"],
-      cmdclass={"tests": PyTest},
+      tests_require=["pytest", "pytest-cov", "moto", "mock"],
+      cmdclass={"test": PyTest},
       long_description=long_description,
       classifiers=[
           "Development Status :: 4 - Beta",
